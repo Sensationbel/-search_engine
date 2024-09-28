@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-3
+      author: Bulaukin
+      comment: created trigger for changed status_time
+      changes:
+        - createTrigger:
+            catalogName: search_engine
+            dbms: postgresql
+            encoding: UTF-8
+            schemaName: search_engine_schema
+            tableName: page
+            path: sql\update-status_time-trigger.sql
+            relativeToChangelogFile: true
+            triggerName: update_creation_time_trigger
+
+
+
+

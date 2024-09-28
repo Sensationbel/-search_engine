@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-4
+      author: Bulaukin
+      comment: Created trigger function for updated status_time
+      changes:
+        - createFunction:
+            catalogName: search_engine
+            dbms: postgresql
+            encoding: UTF-8
+            path: sql\update-status_time-function.sql
+            functionName: update_creation_time_function
+            schemaName: search_engine_schema

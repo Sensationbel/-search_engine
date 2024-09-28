@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-2
+      author: Bulaukin
+      comment: create table page
+      changes:
+        - createTable:
+            tableName: page
+            schemaName: search_engine_schema
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: site_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: path
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                 name: code
+                 type: SMALLINT
+              - column:
+                  name: content
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  descending: true
+                  name: path
+            indexName: idx_path
+#            associatedWith: foreignKey
+            schemaName: search_engine_schema
+            tableName: page
+            unique: true
+
+
+

@@ -1,0 +1,50 @@
+# example values
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/search_engine
+    username: postgres
+    password: 123
+    hikari:
+      schema: search_engine_schema
+      connection-init-sql: CREATE SCHEMA IF NOT EXISTS search_engine_schema
+      connection-timeout: 10000
+
+  liquibase:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+indexing-settings:
+  sites:
+#    - url: https://www.lenta.ru
+#      name: Лента.ру
+#    - url: https://www.skillbox.ru
+#      name: Skillbox
+    - url: https://www.playback.ru
+      name: PlayBack.Ru
+#    - url: https://shahta.by
+#      name: Shahta
+
+connection-settings:
+  user-agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"
+  referrer: "http://www.google.com"
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+#      springframework:
+#        transaction: trace
+
+validator:
+  check-regex: ".*(\\.(css|js|bmp|gif|jpe?g|JPG|webp|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|PDF|doc|docx|rm|smil|wmv|swf|wma|zip|rar|gz|xls|ppt|pptx|xlsx))$"
+decorator:
+  datasource:
+    p6spy:
+      log-filter:
+        pattern: .*delete.*
