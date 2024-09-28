@@ -2,7 +2,7 @@ package by.bulaukin.search_engine.services.index.listener;
 
 import by.bulaukin.search_engine.dto.search_data.PagesDto;
 import by.bulaukin.search_engine.model.entity.Site;
-import by.bulaukin.search_engine.model.services.PageServicesImpl;
+import by.bulaukin.search_engine.model.services.PageServices;
 import by.bulaukin.search_engine.model.services.SiteService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,12 +19,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AddedPagesListenerHolder {
 
-    private final PageServicesImpl pageServices;
+    private final PageServices pageServices;
     private final SiteService service;
 
     @EventListener
     @SneakyThrows
     public void addPageDTOIntoDb(CreatedPagesEventHolder eventHolder) {
+
         pageServices.save(createNewPageDto(eventHolder));
     }
 
@@ -34,9 +35,11 @@ public class AddedPagesListenerHolder {
         String hostName = response.url().getHost();
         Site site = service.findByUrlContainsHostName(hostName);
         String path = response.url().toString();
+
         if(!path.equals(site.getUrl())){
             path = path.replaceAll(site.getUrl(), "");
         }
+
         int statusCode = response.statusCode();
         Document doc = response.parse();
         String pageContent = "";

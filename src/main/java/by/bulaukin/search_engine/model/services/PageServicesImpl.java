@@ -8,11 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -24,7 +21,6 @@ public class PageServicesImpl implements PageServices {
     private final PagesMapper mapper;
 
     @Override
-//    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Page save(PagesDto pagesDto) {
         var pageForSave = mapper.pageDtoToPage(pagesDto);
         log.info("Saving pagesDto %s, %s".formatted(pagesDto.getPath(), Thread.currentThread().getName()));
@@ -41,12 +37,7 @@ public class PageServicesImpl implements PageServices {
 
 
     @Override
-//    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Optional<Page> findByPathIsContaining(String path) {
-        var page = repository.findByPathIsContaining(path).orElse(null);
-        if (page != null) {
-            log.info("result founding path: %s, %s".formatted(page.getPath(), Thread.currentThread().getName()));
-        }
-        return Optional.ofNullable(page);
+       return repository.findByPathIsContaining(path);
     }
 }
