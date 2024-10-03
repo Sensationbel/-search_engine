@@ -3,8 +3,9 @@ databaseChangeLog:
       file: db/changelog/changeset/create-table-site.yaml
   - include:
       file: db/changelog/changeset/create-table-page.yaml
-#  - include:
-#      file: db/changelog/changeset/create-trigger-update-status_time.yaml
-#  - include:
-#      file: db/changelog/changeset/create-function-update-status_time.yaml
+  - include:
+      file: db/changelog/changeset/create-function-update-status_time.yaml
+  - include:
+      file: db/changelog/changeset/create-trigger-update-status_time.yaml
+
 
