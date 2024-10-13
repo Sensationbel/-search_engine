@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface PageServices {
 
     Page save(PagesDto page) throws SQLException;
-    Optional<Page> findByPathIsContaining(String path);
+
+    Optional<Page> findByPath(String path);
 
 }

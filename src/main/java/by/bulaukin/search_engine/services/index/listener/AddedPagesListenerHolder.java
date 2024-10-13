@@ -1,18 +1,15 @@
 package by.bulaukin.search_engine.services.index.listener;
 
 import by.bulaukin.search_engine.dto.search_data.PagesDto;
-import by.bulaukin.search_engine.model.entity.Site;
 import by.bulaukin.search_engine.model.services.PageServices;
-import by.bulaukin.search_engine.model.services.SiteService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Connection;
-import org.jsoup.nodes.Document;
 import org.springframework.context.event.EventListener;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Slf4j
@@ -20,39 +17,26 @@ import java.io.IOException;
 public class AddedPagesListenerHolder {
 
     private final PageServices pageServices;
-    private final SiteService service;
 
     @EventListener
     @SneakyThrows
+    @Transactional(isolation = Isolation.READ_COMMITTED, noRollbackFor = DataIntegrityViolationException.class)
     public void addPageDTOIntoDb(CreatedPagesEventHolder eventHolder) {
 
-        pageServices.save(createNewPageDto(eventHolder));
+        String path = eventHolder.getResponseData().getPath();
+
+        if (pageServices.findByPath(path).isEmpty()) {
+            pageServices.save(createNewPageDto(eventHolder.getResponseData()));
+        }
     }
 
-    private PagesDto createNewPageDto(CreatedPagesEventHolder eventHolder) throws IOException {
-        PagesDto pagesDto = new PagesDto();
-        Connection.Response response = eventHolder.getResponse();
-        String hostName = response.url().getHost();
-        Site site = service.findByUrlContainsHostName(hostName);
-        String path = response.url().toString();
-
-        if(!path.equals(site.getUrl())){
-            path = path.replaceAll(site.getUrl(), "");
-        }
-
-        int statusCode = response.statusCode();
-        Document doc = response.parse();
-        String pageContent = "";
-
-        if(statusCode ==  200) pageContent = doc.html();
-        else log.debug("status code: {}", statusCode);
-
-        pagesDto.setSite(site);
-        pagesDto.setPath(path);
-        pagesDto.setCode(statusCode);
-        pagesDto.setContent(pageContent);
-
-        return pagesDto;
+    private PagesDto createNewPageDto(JsoupResponseData response) {
+        return PagesDto.builder()
+                .code(response.getStatusCode())
+                .site(response.getSite())
+                .content(response.getPageContent())
+                .path(response.getPath())
+                .build();
     }
 
 }

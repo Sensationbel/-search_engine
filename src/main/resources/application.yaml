@@ -27,8 +27,8 @@ indexing-settings:
 #      name: Skillbox
     - url: https://www.playback.ru
       name: PlayBack.Ru
-#    - url: https://shahta.by
-#      name: Shahta
+    - url: https://shahta.by
+      name: Shahta
 
 connection-settings:
   user-agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"
@@ -37,10 +37,12 @@ logging:
   level:
     org:
       hibernate:
-        type: trace
+        type: info
+  file:
+    path: D:\diploma_project\search-engine
+    name: my.log
 #      springframework:
 #        transaction: trace
-
 validator:
   check-regex: ".*(\\.(css|js|bmp|gif|jpe?g|JPG|webp|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|PDF|doc|docx|rm|smil|wmv|swf|wma|zip|rar|gz|xls|ppt|pptx|xlsx))$"
 decorator:

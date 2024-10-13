@@ -2,6 +2,7 @@ package by.bulaukin.search_engine.services.index;
 
 import by.bulaukin.search_engine.config.SiteData;
 import by.bulaukin.search_engine.config.SitesDataList;
+import by.bulaukin.search_engine.dto.statistics.ResultParsResponse;
 import by.bulaukin.search_engine.model.entity.Site;
 import by.bulaukin.search_engine.model.mapper.SitesMapper;
 import by.bulaukin.search_engine.model.services.SiteService;
@@ -23,16 +24,14 @@ public class IndexationService {
     private final SiteService siteService;
     private final SitesMapper mapper;
 
-    public void startPars() {
+    public ResultParsResponse startPars() {
         List<Site> sites = prepareSiteData(sitesList);
-        
+        ResultParsResponse response = new ResultParsResponse();
+        response.setResult(true);
         sites.forEach(site -> {
-            log.info("indexationService startParse started with url:" + site.getUrl());
-            webParser.setSite(site);
-            forkJoinPool.invoke(new RecursiveWebParser(webParser.parsPage(site.getUrl()), webParser));
-            log.info("indexationService startParse finished with url:" + site.getUrl());
+            forkJoinPool.submit(new RecursiveWebParser(webParser.parsPage(site.getUrl()), webParser));
         });
-
+        return response;
     }
 
     private List<Site> prepareSiteData(SitesDataList sitesList) {

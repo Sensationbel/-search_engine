@@ -1,6 +1,6 @@
 package by.bulaukin.search_engine.controllers;
 
-import by.bulaukin.search_engine.dto.statistics.ResultResponse;
+import by.bulaukin.search_engine.dto.statistics.ResultParsResponse;
 import by.bulaukin.search_engine.dto.statistics.StatisticsResponse;
 import by.bulaukin.search_engine.services.StatisticsService;
 import by.bulaukin.search_engine.services.index.IndexationService;
@@ -27,12 +27,8 @@ public class ApiController {
     }
 
     @GetMapping("/startIndexing")
-    public ResponseEntity<ResultResponse> startIndexing() {
+    public ResponseEntity<ResultParsResponse> startIndexing() {
         log.info("ApiController.startIndexing started into" + Thread.currentThread().getName());
-        indexationService.startPars();
-        ResultResponse resultResponse = new ResultResponse();
-        resultResponse.setResult(true);
-        log.info("ApiController.startIndexing finished into " + Thread.currentThread().getName());
-        return ResponseEntity.ok(resultResponse);
+        return ResponseEntity.ok(indexationService.startPars());
     }
 }

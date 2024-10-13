@@ -1,16 +1,15 @@
 package by.bulaukin.search_engine.services.index.listener;
 
 import lombok.Getter;
-import org.jsoup.Connection;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class CreatedPagesEventHolder extends ApplicationEvent {
 
-    private final Connection.Response response;
+    private final JsoupResponseData responseData;
 
-    public CreatedPagesEventHolder(Object source, Connection.Response response) {
+    public CreatedPagesEventHolder(Object source, JsoupResponseData response) {
         super(source);
-        this.response = response;
+        this.responseData = response;
     }
 }

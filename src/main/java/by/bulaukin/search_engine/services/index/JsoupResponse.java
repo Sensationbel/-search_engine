@@ -19,7 +19,7 @@ public class JsoupResponse {
     public Connection.Response getResponse(String pageUrl) {
         return Jsoup.connect(pageUrl)
                 .userAgent(connectionData.getUserAgent())
-//                .timeout(5000)
+//                .timeout(1500)
                 .referrer(connectionData.getReferrer())
                 .ignoreHttpErrors(true)
                 .execute().bufferUp();

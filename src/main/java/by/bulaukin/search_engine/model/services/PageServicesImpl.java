@@ -23,12 +23,12 @@ public class PageServicesImpl implements PageServices {
     @Override
     public Page save(PagesDto pagesDto) {
         var pageForSave = mapper.pageDtoToPage(pagesDto);
-        log.info("Saving pagesDto %s, %s".formatted(pagesDto.getPath(), Thread.currentThread().getName()));
+        log.debug("Saving pagesDto %s, %s".formatted(pagesDto.getPath(), Thread.currentThread().getName()));
         try {
             return repository.save(pageForSave);
         } catch (DataIntegrityViolationException e) {
             if (e.getMostSpecificCause().getClass().getName().equals("org.postgresql.util.PSQLException") && ((SQLException) e.getMostSpecificCause()).getSQLState().equals("23505")) {
-                log.info("saving pagesDto: {}", e.getMostSpecificCause().getMessage());
+                log.info("PageDto wasn't saved: {}", e.getMostSpecificCause().getMessage());
             }
             return new Page();
         }
@@ -37,7 +37,13 @@ public class PageServicesImpl implements PageServices {
 
 
     @Override
-    public Optional<Page> findByPathIsContaining(String path) {
-       return repository.findByPathIsContaining(path);
+    public Optional<Page> findByPath(String path) {
+        log.debug("Search path: {}", path);
+        try {
+            return repository.findByPath(path);
+        } catch (RuntimeException exception) {
+            log.info("Failed path: {}, message: {}", path, exception.getMessage());
+        }
+        return Optional.empty();
     }
 }

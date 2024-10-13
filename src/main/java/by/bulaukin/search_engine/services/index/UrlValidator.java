@@ -1,6 +1,5 @@
 package by.bulaukin.search_engine.services.index;
 
-import by.bulaukin.search_engine.model.entity.Site;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +19,10 @@ public class UrlValidator {
     @Value("${validator.check-regex}")
     private String checkRegex;
 
-    public boolean isValidAndNotVisit(Site site, String currentPage) {
-        String headPage = site.getUrl();
-        return currentPage.startsWith(headPage)
-                && !currentPage.equals(headPage + "/")
+    public boolean isValidAndNotVisit(String hostName, String currentPage) {
+        log.debug("Checking current page, where host name: {} and current page: {} ", hostName, currentPage);
+        return currentPage.contains(hostName)
+                && !currentPage.equals(hostName + "/")
                 && !isFile(currentPage)
                 && !currentPage.contains("#")
                 && !currentPage.contains("?")
@@ -32,7 +31,7 @@ public class UrlValidator {
     }
 
     private boolean isNotVisit(String currentPage) {
-       return visitedPage.add(currentPage);
+        return visitedPage.add(currentPage);
     }
 
     private boolean isFile(String currentPage) {
