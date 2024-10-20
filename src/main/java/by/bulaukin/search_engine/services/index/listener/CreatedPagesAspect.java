@@ -38,7 +38,7 @@ public class CreatedPagesAspect {
     private JsoupResponseData getDataFromJsoupResponse(Connection.Response response) throws IOException {
         JsoupResponseData data = new JsoupResponseData();
         data.setSite(getUrlContainsHostName(response));
-        data.setPath(response.url().getPath());
+        data.setPath(getUrlFromResponse(response));
         data.setStatusCode(response.statusCode());
         Document document = response.parse();
 
@@ -54,6 +54,15 @@ public class CreatedPagesAspect {
 
     private Site getUrlContainsHostName(Connection.Response response) {
         return service.findByUrlContainsHostName(response.url().getHost());
+    }
+
+    private String getUrlFromResponse(Connection.Response response) {
+        String path = response.url().getPath();
+        String host = response.url().getHost();
+        if (path.isEmpty()) {
+            return host;
+        }
+        return path;
     }
 
 }

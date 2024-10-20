@@ -7,7 +7,7 @@ public enum Status {
 
     INDEXING("INDEXING"),
     INDEXED("INDEXED"),
-    FAILED("C");
+    FAILED("FAILED");
 
     private final String status;
 

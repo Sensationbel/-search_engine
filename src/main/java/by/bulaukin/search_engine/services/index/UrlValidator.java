@@ -19,10 +19,11 @@ public class UrlValidator {
     @Value("${validator.check-regex}")
     private String checkRegex;
 
-    public boolean isValidAndNotVisit(String hostName, String currentPage) {
-        log.debug("Checking current page, where host name: {} and current page: {} ", hostName, currentPage);
-        return currentPage.contains(hostName)
-                && !currentPage.equals(hostName + "/")
+    public boolean isValidAndNotVisit(String headPage, String currentPage) {
+
+        log.debug("Checking current page, where host name: {} and current page: {} ", headPage, currentPage);
+        return currentPage.startsWith(headPage)
+                && !currentPage.equals(headPage + "/")
                 && !isFile(currentPage)
                 && !currentPage.contains("#")
                 && !currentPage.contains("?")
@@ -35,6 +36,7 @@ public class UrlValidator {
     }
 
     private boolean isFile(String currentPage) {
+
         Pattern fileFilter =
                 Pattern.compile(checkRegex);
         return fileFilter.matcher(currentPage).matches();
